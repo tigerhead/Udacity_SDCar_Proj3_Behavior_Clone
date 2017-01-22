@@ -97,7 +97,7 @@ Model 2 use more augmentation techniques to create image in different situations
 
 I spend lot of time on training. I played with learning rate and adjusted network architecture. I found out that loss error can only be used as a rogh reference. Lower error doesn't necessarily mean it work better in simulator test. I used checkpoint to save weighs for each epoch. And try each one of them to pick better weight. After many hours experiments, I finally got one weights for model 1 which drove track 1 smoothly. But model one failed easily in track 2, after reading post in forum and I finally found Vivek's blog about augmentation. I followed his blog, did the same augmentation in the blog(listed in Image preprocessing section), and worked well in both track 1 and 2. And I also tried to fine tuning model by load the save model and train it again further more using lower learning rate.
 
-## Test Result
+# Test Result
 
 I recorded test result of model 1 on Track 1 and Model 2 on track 2. 
 
@@ -105,7 +105,9 @@ Track 1 video driven by model 1: https://youtu.be/GVTYq-stYwA
 
 Tack 2 video driven by model 2: https://youtu.be/TvAb9CSlehM
 
+#Some notes:
 
+To execute model.py or model2.py, put all images under data/IMG directory. And for model1.py, it save weighss in models_1_01 directory and model2.py save weights in models_2_01 directory.
 
 # Reference 
 1. End to End Learning for Self-Driving Cars, Nvidia  http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf
