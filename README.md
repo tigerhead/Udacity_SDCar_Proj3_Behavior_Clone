@@ -21,28 +21,39 @@ Input image shape: 80 X 160 X 3
 
 ### Layer 1:
 Convolutional using 5X5X3 filler and 24 maps. The output shape should be 76x156x24.
+
 Activation: Relu
+
 Pooling: Max pooling with 2X2 kernel and stride = 1. The output shape should be 38x78x24.
 
 ### Layer 2:
 Convolutional using 5X5X1 filter and 36 maps. The output shape should be 34x74x36.
+
 Activation: Relu.
+
 Pooling: Max pooling with 2X2 kernel and stride = 1 The output shape should be 17x37x36.
+
 Dropout: 0.5
 
 ### Layer 3:
 Convolutional using 5X5X1 filter and 48 maps. The output shape should be 13x33x48.
+
 Activation: Relu.
+
 Pooling: Max pooling with 2X2 kenel and stride = 1 The output shape should be 6x16x48.
+
 Dropout: 0.5
 
 ### Layer 4:
 Convolutional using 3X3X1 filter and 64 maps. The output shape should be 4x14x64.
+
 Activation: Relu.
 
 ### Layer 5:
 Convolutional using 3X3X1 filter and 128 maps. The output shape should be 2x12x128.
+
 Activation: Relu.
+
 Dropout: 0.5
 
 ### Flatten: 
@@ -50,10 +61,12 @@ Flatten the output shape of the final pooling layer such that it's 1D instead of
 
 ### Layer 6: 
 Fully Connected with 1164 neurons. Output is 1164.
+
 Activation: Relu.
 
 ### Layer 7: 
 Fully Connected with 100 neurons. Output is 100.
+
 Activation: Relu.
 
 ### Layer 8:
@@ -63,7 +76,9 @@ Activation: Relu.
 
 ### Layer 9:
 Fully Connected with 20 neurons. Output is 20.
+
 Activation: Relu
+
 Dropout: 0.5
 
 ### Layer 10(readout layer): 
