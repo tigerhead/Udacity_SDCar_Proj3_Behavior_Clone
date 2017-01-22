@@ -72,6 +72,15 @@ print('Train label shape: ', y_train.shape)
 # Shuffle data
 X_train_files, y_train = shuffle(X_train_files, y_train)
 
+#Split dataset and labels to traning and validation dataset, labels using
+def split_data(X, y, t_size = 0.1):
+    X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size= t_size, random_state=42, stratify=None)
+    return X_train, X_test, y_train, y_test
+#Split test and validation set. Since the validtion set doesn't really help to train the model,
+# the split is not used in the end.'
+#X_train_files, X_val_files, y_train, y_val = split_data(X_train_files, y_train)
+
 
 
 print('Train Shape: ', X_train_files.shape)
