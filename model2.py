@@ -14,10 +14,13 @@ from keras.layers.pooling import MaxPooling2D
 from keras import backend as K
 from keras.callbacks import ModelCheckpoint
 import cv2
+#load conifig
 import bcConfig as config
+#Image preprocess
 from imageProcess import preprocessImage2, augment_brightness_camera_images, trans_image
 
 
+#Load config
 log_file = config.DRIVE_LOG_FILE
 image_path = config.DATA_FILE_PATH
 image_channel = config.ORG_IMAGE_CHANNEL
@@ -26,13 +29,15 @@ image_w = config.ORG_IMAGE_WIDTH
 in_image_h = config.CORP_IMAGE_HEIGHT2
 in_image_w = config.CORP_IMAGE_WIDTH2
 
+#Parse drive log file
 input = np.genfromtxt (log_file, dtype=None, delimiter=",")
 input = input[1:]
 print("Shape: ", input.shape)
 print('Sample data: ', input[0])
 
+#Training image file path
 X_train_files = input[: ,[0, 1, 2 ]]
-
+#Train Steering data
 y_train = (input[:,3 ]).astype(np.float32)
 
 print('Sample data: ', X_train_files[0])
@@ -44,13 +49,11 @@ print('Train label shape: ', y_train.shape)
 
 
 
-# TODO: Use `train_test_split` here.
+# Shuffle train data and label
 X_train_files, y_train = shuffle(X_train_files, y_train)
 
 
-
-
-
+#Get teh iamge file name
 def find_between( s, first, last ):
     try:
         start = s.index( first ) + len( first )
@@ -63,24 +66,9 @@ def get_file_name(s):
     return find_between(str(s), "IMG/", "'")
 
 
-
-
-
-
-def find_between( s, first, last ):
-    try:
-        start = s.index( first ) + len( first )
-        end = s.index( last, start )
-        return s[start:end]
-    except ValueError:
-        return ""
-
-def get_file_name(s):
-    return find_between(str(s), "IMG/", "'")
-
-
-
+#Load and preprocess image data
 def preprocess_image_file_train(x, y):
+    # Randomly load center, left or right image
     i_lrc = np.random.randint(3)
     if (i_lrc == 0):
         path_file = x[1].strip()
@@ -96,11 +84,16 @@ def preprocess_image_file_train(x, y):
     y_stee = None
     try:
         image = cv2.imread(image_path + get_file_name(path_file)).astype(np.float32)
+        #Convert BGR to RGB
         image = cv2.cvtColor(image,cv2.COLOR_BGR2RGB)
+        # Randomly shift image
         image,y_steer = trans_image(image,y_steer,100)
+        #Randomly brighten or darken image
         image = augment_brightness_camera_images(image)
+        #Corp, resize and normalize
         image = preprocessImage2(image)
         image = np.array(image)
+        #Flip image and steering
         ind_flip = np.random.randint(2)
         if ind_flip==0:
             image = cv2.flip(image,1)
@@ -201,7 +194,7 @@ def nvidia_model():
     model.add(Activation('relu'))
     model.add(Dense(20))
     model.add(Activation('relu'))
-    #model.add(Dropout(0.5))
+    model.add(Dropout(0.5))
     model.add(Dense(1))
     model.summary()
     return model
@@ -214,16 +207,17 @@ if __name__ == '__main__':
     model = nvidia_model()
     model.summary()
     batch_size = 64
-    nb_epoch = 10
+    nb_epoch = 8
     model.compile(loss='mse',
               optimizer=Adam(lr=0.0001),
               metrics=['mse']
              )
 
-    #Using generator to handle large dataset
-    #for regression problem, use mean squre error as validation matrics
+    #Set check point and path to save weights for each epoch
     checkpoint_path="models_2_01/model_{epoch:02d}.h5"
     checkpoint = ModelCheckpoint(checkpoint_path, verbose=1, save_best_only=False, save_weights_only=True, mode='auto')
+    #Using generator to handle large dataset
+    #for regression problem, use mean squre error as validation matrics
     model.fit_generator(generator=generate_data(image_path, X_train_files, y_train, batch_size),
                     samples_per_epoch = ((X_train_files.shape[0] - X_train_files.shape[0] % batch_size) * 2),
                     nb_epoch=nb_epoch,
@@ -232,11 +226,12 @@ if __name__ == '__main__':
                     #validation_data = generate_data_2(image_path, X_val_files, y_val, 50),
                     #nb_val_samples= (X_val_files.shape[0]- X_val_files.shape[0]%50)
                     )
-   # pred = model.predict_generator(generate_data_2(image_path, X_val_files, y_val, batch_size), val_samples = X_val_files.shape[0]- X_val_files.shape[0]%batch_size)
+    # pred = model.predict_generator(generate_data_2(image_path, X_val_files, y_val, batch_size), val_samples = X_val_files.shape[0]- X_val_files.shape[0]%batch_size)
 
-   # for y_pred, y_target in zip(pred[0: 30], y_val[0: 30]):
-     #   print(y_pred, y_target)
+    #for y_pred, y_target in zip(pred[0: 30], y_val[0: 30]):
+    #   print(y_pred, y_target)
 
+    #Save model and weights
     model_str =model.to_json()
     json_file = 'model2.json'
     weights_file = 'model2.h5'

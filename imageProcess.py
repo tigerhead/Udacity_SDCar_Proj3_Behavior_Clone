@@ -1,8 +1,11 @@
 import cv2
 import numpy as np
+#load conifig
 import bcConfig as config
 import math
 
+
+#Get image size form config
 image_h = config.ORG_IMAGE_HEIGHT
 image_w = config.ORG_IMAGE_WIDTH
 in_image_h = config.CORP_IMAGE_HEIGHT
@@ -63,16 +66,24 @@ def add_random_shadow(image):
     image = cv2.cvtColor(image_hls,cv2.COLOR_HLS2RGB)
 
 
+# Normolize the image between 0.5 and -0.5
 def normalize(x):
     image_depth = 255.0
     return (x - image_depth/2)/image_depth
 
-
+#Preprocess for model 1(model.py)
+# Normolize the image between 0.5 and -0.5
+#and resize image to Height: 80 , Width: 160
 def preprocessImage(x):
     image_depth = 255.0
     x= cv2.resize(x,(in_image_w, in_image_h),  interpolation=cv2.INTER_AREA)
     return normalize(x)
 
+
+#Preprocess for model 2(model2.py)
+#Corp botton 1/5 to cut dashboard
+#and resize image to Height: 64 , Width: 64
+#Normolize the image between 0.5 and -0.5
 
 def preprocessImage2(image):
     shape = image.shape
