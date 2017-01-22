@@ -110,3 +110,4 @@ Tack 2 video driven by model 2: https://youtu.be/TvAb9CSlehM
 # Reference 
 1. End to End Learning for Self-Driving Cars, Nvidia  http://images.nvidia.com/content/tegra/automotive/images/2016/solutions/pdf/end-to-end-dl-using-px.pdf
 2. Vivek Yadav Blog https://chatbotslife.com/using-augmentation-to-mimic-human-driving-496b569760a9#.9y77pio6s
+3. https://blog.keras.io/building-powerful-image-classification-models-using-very-little-data.html
