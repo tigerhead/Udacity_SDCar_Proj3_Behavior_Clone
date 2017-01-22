@@ -69,6 +69,8 @@ Fully Connected with 100 neurons. Output is 200.
 
 Activation: Relu.
 
+Dropout: 0.5
+
 ### Layer 8:
 Fully Connected with 50 neurons. Output is 100.
 
@@ -79,7 +81,6 @@ Fully Connected with 20 neurons. Output is 20.
 
 Activation: Relu
 
-Dropout: 0.5
 
 ### Layer 10(readout layer): 
 Fully Connected  1 neurons. Output is 1.
